@@ -2,3 +2,7 @@
 ~$*.doc
 *.pyc
 __pycache__/
+outputs/*.docx
+outputs/*.doc
+~WRL*.tmp
+*.tmp

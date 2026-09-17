@@ -18,14 +18,11 @@ using a single 128x128 panda image as the dataset.
   (`outputs/preprocessing_pipeline_view.png`) showing every pipeline step
   side by side, for a quick visual walkthrough/demo.
 - `generate_lab_journal.py` — builds a Word document lab journal
-  (`outputs/Lab03_Journal_Image_Preprocessing.docx`) combining the code and
-  outputs, ready to submit.
-- `viva.md` — a viva/exam prep guide: what each import does, errors if
-  removed, a plain-language explanation of the whole pipeline, and a
-  MinMaxScaler vs StandardScaler comparison.
+  (`outputs/Lab03_Journal_Image_Preprocessing.docx`, not tracked in this repo)
+  combining the code and outputs, ready to submit.
 - `dataset/panda_original.jpg` — the source image used as the dataset.
-- `outputs/` — all generated results (resized image, CSVs, comparison
-  figures, console logs, and the Word journal).
+- `outputs/` — generated results (resized image, CSVs, comparison figures,
+  console logs).
 
 ## Run order
 

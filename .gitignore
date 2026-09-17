@@ -1,0 +1,4 @@
+~$*.docx
+~$*.doc
+*.pyc
+__pycache__/

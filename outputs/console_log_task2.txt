@@ -1,0 +1,70 @@
+======================================================================
+STEP 1: LOAD TABULAR PIXEL DATASET
+======================================================================
+Loaded 'outputs\pixel_table.csv' with shape (16384, 9)
+Columns: ['row', 'col', 'R', 'G', 'B', 'R_norm', 'G_norm', 'B_norm', 'brightness']
+Feature matrix X (raw pixel values) shape: (16384, 3)
+Before scaling -> min=0.00 max=255.00 mean=199.85 std=86.63
+
+======================================================================
+STEP 2: STANDARDIZATION (StandardScaler)
+======================================================================
+Learned per-column mean : [201.21051025 198.04870605 200.30413818]
+Learned per-column std  : [87.55615907 89.20202925 82.99511612]
+After StandardScaler -> min=-2.413 max=0.659 mean=0.000 std=1.000
+
+======================================================================
+STEP 3: NORMALIZATION (MinMaxScaler)
+======================================================================
+Learned per-column min : [0. 0. 0.]
+Learned per-column max : [255. 255. 255.]
+After MinMaxScaler -> min=0.000 max=1.000 mean=0.784 std=0.340
+
+======================================================================
+STEP 4: SAVE SCALED TABULAR DATASETS
+======================================================================
+Saved -> outputs\pixel_table_standardscaled.csv
+Saved -> outputs\pixel_table_minmaxscaled.csv
+
+======================================================================
+STEP 5: VISUALIZE PIXEL-VALUE DISTRIBUTIONS BEFORE / AFTER SCALING
+======================================================================
+Saved distribution comparison figure -> outputs\scaling_distributions.png
+
+STEP 6: WHEN TO USE MinMaxScaler vs StandardScaler ON IMAGE DATA
+======================================================================
+MinMaxScaler (Normalization, X' = (X - Xmin) / (Xmax - Xmin)):
+  - Rescales values into a fixed, known range (default [0, 1]).
+  - Ideal for image pixel data because pixel intensities already have a
+    known, fixed range (0-255 for 8-bit images), so the min/max are known
+    and consistent across images.
+  - Commonly used before feeding images into neural networks / CNNs, since
+    most activation functions and image-display conventions expect inputs
+    in [0, 1] (or [-1, 1] with a shifted variant).
+  - Sensitive to outliers: a single unusually bright/dark pixel can stretch
+    the scale and compress the rest of the values.
+
+StandardScaler (Standardization, X' = (X - mean) / std):
+  - Centers values around 0 with unit standard deviation; does NOT bound
+    values to a fixed range.
+  - Useful when the model assumes/benefits from normally-distributed,
+    zero-centered features (e.g., PCA, linear/logistic regression, SVM,
+    k-means), or when different features have very different natural scales
+    that need to be put on comparable footing.
+  - Less sensitive to a fixed min/max, more robust when the data's range
+    isn't naturally bounded or when outliers should have a smaller relative
+    effect on the extremes of the scaled data (though it is still affected
+    by outliers through the mean/std).
+
+For this image-preprocessing task specifically: MinMaxScaler is generally
+preferred for raw pixel values because the physical range (0-255) is fixed
+and known in advance, so mapping it to [0, 1] is simple, interpretable, and
+matches what most image-based ML/DL pipelines expect. StandardScaler becomes
+more relevant later in the pipeline, e.g., when pixel data has already been
+turned into extracted numeric features (like edge counts, color histograms,
+or CNN embedding vectors) with unknown/unbounded ranges and varying scales,
+where zero-centering helps optimization algorithms converge faster.
+
+
+Task 2 complete. See outputs/ for the scaled CSVs and the distribution
+comparison figure (scaling_distributions.png).

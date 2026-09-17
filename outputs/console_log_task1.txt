@@ -1,0 +1,75 @@
+======================================================================
+STEP 1: LOAD & EXPLORE THE IMAGE
+======================================================================
+Loaded image : dataset\panda_original.jpg
+Original size (W,H) : (720, 720)
+Mode : RGB
+Original pixel array shape : (720, 720, 3) dtype=uint8
+Original pixel value range : min=0 max=255 mean=199.98
+
+======================================================================
+STEP 2: HANDLE MISSING / CORRUPTED IMAGES
+======================================================================
+The try/except block above already covers this: if the image file did not exist, or Image.verify() found it corrupted, the script would report the problem and stop instead of crashing on broken pixel data. Since the image loaded successfully here, no rows need to be dropped.
+
+======================================================================
+STEP 3: RESIZE IMAGE TO (128, 128)
+======================================================================
+Resized pixel array shape : (128, 128, 3)
+Saved resized image -> outputs/panda_resized_128x128.jpg
+
+======================================================================
+STEP 4: PREPROCESS PIXEL VALUES (NORMALIZE EACH PIXEL TO [0, 1])
+======================================================================
+Pixel range before normalization : 0 - 255
+Pixel range after  normalization : 0.000 - 1.000
+
+======================================================================
+STEP 5: CONVERT IMAGE PIXELS INTO A TABULAR (ROW/COLUMN) DATASET
+======================================================================
+Tabular dataset shape (rows=pixels, columns=features) : (16384, 9)
+First 5 rows of the tabular pixel dataset:
+ row  col   R   G   B  R_norm  G_norm  B_norm brightness
+   0    0 255 255 255     1.0     1.0     1.0      light
+   0    1 255 255 255     1.0     1.0     1.0      light
+   0    2 255 255 255     1.0     1.0     1.0      light
+   0    3 255 255 255     1.0     1.0     1.0      light
+   0    4 255 255 255     1.0     1.0     1.0      light
+Saved full tabular pixel dataset -> outputs\pixel_table.csv
+
+======================================================================
+STEP 6: MEAN IMPUTATION ON SIMULATED MISSING PIXEL VALUES
+======================================================================
+Our single image has no missing pixel values on its own, so to demonstrate the handout's Mean Imputation technique (SimpleImputer, strategy='mean'), we randomly mark ~2% of R/G/B pixel values as missing (NaN) - simulating sensor noise / corrupted pixel readings - then fill them back in using the mean of each column, exactly like imputa = SimpleImputer(missing_values=np.nan, strategy='mean') did for the Age and Salary columns in the handout.
+Simulated missing values : 984 out of 49152 pixel-channel entries (2.00%)
+Column means learned by SimpleImputer (used to fill NaNs) : R=201.19 G=198.02 B=200.29
+Sample rows that had a missing value, before vs after mean imputation:
+ row  col  R_missing  G_missing  B_missing  R_mean_imputed  G_mean_imputed  B_mean_imputed
+   0   17        NaN      255.0      255.0      201.187263      255.000000      255.000000
+   0   68        NaN      255.0      255.0      201.187263      255.000000      255.000000
+   0   79      255.0        NaN      255.0      255.000000      198.020754      255.000000
+   1    3      255.0        NaN      255.0      255.000000      198.020754      255.000000
+   1   12      255.0      255.0        NaN      255.000000      255.000000      200.292403
+Saved tabular dataset with missing-value + mean-imputed columns -> outputs\pixel_table_mean_imputed.csv
+
+======================================================================
+STEP 7: ONE-HOT ENCODE THE CATEGORICAL 'brightness' COLUMN
+======================================================================
+Categories found : ['dark', 'light', 'mid']
+First 5 rows after one-hot encoding:
+ row  col   R   G   B  R_norm  G_norm  B_norm brightness  R_missing  G_missing  B_missing  R_mean_imputed  G_mean_imputed  B_mean_imputed  brightness_dark  brightness_light  brightness_mid
+   0    0 255 255 255     1.0     1.0     1.0      light      255.0      255.0      255.0           255.0           255.0           255.0              0.0               1.0             0.0
+   0    1 255 255 255     1.0     1.0     1.0      light      255.0      255.0      255.0           255.0           255.0           255.0              0.0               1.0             0.0
+   0    2 255 255 255     1.0     1.0     1.0      light      255.0      255.0      255.0           255.0           255.0           255.0              0.0               1.0             0.0
+   0    3 255 255 255     1.0     1.0     1.0      light      255.0      255.0      255.0           255.0           255.0           255.0              0.0               1.0             0.0
+   0    4 255 255 255     1.0     1.0     1.0      light      255.0      255.0      255.0           255.0           255.0           255.0              0.0               1.0             0.0
+Saved one-hot encoded tabular dataset -> outputs\pixel_table_encoded.csv
+
+======================================================================
+STEP 8: VISUALIZE ORIGINAL (128x128) VS PREPROCESSED (128x128) IMAGE
+======================================================================
+Saved comparison figure -> outputs\original_vs_preprocessed.png
+
+Task 1 complete. See outputs/ for the resized image, the visualization,
+and the tabular pixel CSVs (pixel_table.csv, pixel_table_mean_imputed.csv,
+pixel_table_encoded.csv).

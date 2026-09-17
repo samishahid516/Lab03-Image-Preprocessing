@@ -24,6 +24,25 @@ using a single 128x128 panda image as the dataset.
 - `outputs/` — generated results (resized image, CSVs, comparison figures,
   console logs).
 
+## Output Screenshots
+
+### Task 1 — Image Preprocessing
+
+**Full pipeline, step by step** (resize → normalize → simulated missing
+pixels → mean imputation → brightness categories → scaling → pixel grid):
+
+![Preprocessing pipeline](outputs/preprocessing_pipeline_view.png)
+
+**Resized (raw) vs preprocessed (normalized) image:**
+
+![Original vs preprocessed](outputs/original_vs_preprocessed.png)
+
+### Task 2 — Feature Scaling
+
+**Pixel-value distributions before/after StandardScaler and MinMaxScaler:**
+
+![Scaling distributions](outputs/scaling_distributions.png)
+
 ## Run order
 
 ```bash
